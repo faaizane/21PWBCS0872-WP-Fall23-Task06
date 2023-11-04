@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OLMS</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        @media screen and (max-width: 992px) {
+            .colms{
+                border-bottom: solid 1px black;
+                margin-bottom: 30px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="m-3">
+        <div class="mb-3" style="border-bottom: solid 1px grey;">
+            <H1>OLMS</H1></div>
+        <div class="row">
+
+        <div class="col-lg-4 col-md-12 p-2 colms" style="border-right: solid 1px grey;">
+            <div class="mb-3"><h2>Book List</h2></div>
+            <div class="mb-3">
+                <ol class="bookList" id="bookList">
+                    <li>"The Lord of the Rings" by J.R.R. Tolkien, ISBN: 978-0-345-44976-6</li>
+                    <li>"The Shining" by Stephen King, ISBN: 978-0-385-12167-5</li>
+                    <li>"The Chronicles of Narnia: The Lion, the Witch and the Wardrobe by C.S. Lewis, ISBN: 978-0-06-023481-2</li>
+                </ol>
+            </div>
+        </div>
+
+        <div class="col-lg-4 col-md-12 p-2 colms" style="border-right: solid 1px grey;">
+            <div class="mb-3"><h2>Add New Book</h2></div>
+            <div class="mb-3">
+                <input type="text" id="bookTitle" class="form-control"  placeholder="Title">
+            </div>
+            <div class="mb-3">
+                <input type="text" id="bookAuthor" class="form-control"  placeholder="Author">
+            </div>
+            <div class="mb-3">
+                <input type="text" id="bookISBN" class="form-control"  placeholder="ISBN">
+            </div>
+            <div class="mb-3">
+                <button type="button" id="addButton" class="btn btn-primary">Add Book</button>
+            </div>
+        </div>
+
+        <div class="col-lg-4 col-md-12 p-2 colms">
+            <div class="mb-3"><h2>Search for Books</h2></div>
+            <div class="mb-3">
+                <input type="search" id="bookSearch" class="form-control"  placeholder="Search the book">
+            </div>
+            <div class="mb-3">
+                <button type="button" id="searchButton" class="btn btn-primary">Search</button>
+            </div>
+            <div class="mb-3">
+                <ol class="searchList" id="searchList"></ol>
+                <p id="msgPara"></p>
+            </div>
+        </div>
+        </div>
+    </div>
+
+    <script>
+        const bookTitle = document.getElementById('bookTitle');
+        const bookAuthor = document.getElementById('bookAuthor');
+        const bookISBN = document.getElementById('bookISBN');
+        const addButton = document.getElementById('addButton');
+        const bookList = document.getElementById('bookList');
+        const addedBooks  = {};
+        
+        function addingBook(){
+
+            if (bookTitle.value.trim() !== '' && bookAuthor.value.trim() !== '' && bookISBN.value.trim() !== '') {
+                const repeatName = bookTitle.value;
+            if (!addedBooks[repeatName]) {
+                addedBooks[repeatName] = true;
+                const individualBook = document.createElement("li");
+                individualBook.innerHTML = "\"" + bookTitle.value + "\"" + " by " + bookAuthor.value +"," + " ISBN: " + bookISBN.value;
+                bookList.appendChild(individualBook);
+            }
+        }
+        }
+        addButton.addEventListener('click',addingBook);
+
+        // For Search Box
+        const  searchButton = document.getElementById('searchButton');
+        const  searchList = document.getElementById('searchList');
+
+        function searchBook(){
+        const search = document.getElementById('bookSearch').value.toLowerCase();
+        const target = document.getElementById("bookList");
+        const bookNames = target.getElementsByTagName('li');
+        const message = "Sorry! your book is not available";
+        const msg = document.getElementById("msgPara");
+
+        while (searchList.firstChild) {
+        searchList.removeChild(searchList.firstChild);
+        }
+
+        let unmatched = true;
+        for(var i=0; i < bookNames.length; i++){
+		var checkBook = bookNames[i].innerHTML;
+		if(checkBook.toLowerCase().indexOf(search) > -1){
+            const copy = bookNames[i].cloneNode(true);
+			searchList.appendChild(copy);
+            unmatched = false;
+		}
+	}
+    if(unmatched){
+        msg.innerHTML = message;
+    }else{
+        msg.innerHTML = "";
+    }
+}
+searchButton.addEventListener('click',searchBook);
+
+    </script>
+</body>
+</html>
